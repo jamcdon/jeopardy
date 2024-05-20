@@ -2,6 +2,34 @@
 // intro would be a nice to have add
 // picture handling NOT DONE
 // i think something else design wise but its late
+const client = "board"
+
+const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+const wsHost = location.host;
+const wsUrl = `${wsProtocol}//${wsHost}`;
+
+let socket = new WebSocket(wsUrl);
+
+socket.onopen = function(event) {
+    console.log("[open] connection established");
+    sendJSON("SYN");
+}
+
+socket.onmessage = function(event) {
+    console.log(event.data);
+    switch (event.data.content){
+        case "SYN":
+            sendJSON("ACK");
+            break;
+    }
+}
+
+let sendJSON = (content) => {
+    socket.send(`{
+        "client": "${client}",
+        "content": "${content}"
+    }`)
+}
 
 buzzIn = (playerName) => {
 	document.getElementById(`question-${playerName}`).classList.toggle('border-animate');

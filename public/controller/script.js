@@ -4,6 +4,35 @@
 // add a modal element with a watcher for double jeopardy that requires input of amount wagered before continuing
 
 // make submit players button work
+const client = "controller"
+
+const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+const wsHost = location.host;
+const wsUrl = `${wsProtocol}//${wsHost}`;
+
+let socket = new WebSocket(wsUrl);
+
+socket.onopen = function(event) {
+    console.log("[open] connection established");
+    sendJSON("SYN");
+}
+
+socket.onmessage = function(event) {
+    console.log(event.data);
+    switch (event.data.content){
+        case "SYN":
+            sendJSON("ACK");
+            break;
+    }
+}
+
+let sendJSON = (content) => {
+    socket.send(`{
+        "client": "${client}",
+        "content": "${content}"
+    }`)
+}
+
 var app = new Vue({
 	el: "#app",
     mounted:function(){

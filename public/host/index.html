@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>jeopardyHost</title>
+        <meta charset="utf-8">
+        <!link rel="icon" href="/img/favicon.svg">
+        <link rel="stylesheet" href="/host/style.css">
+    </head>
+
+    <body>
+        <div id="app">
+            <div id="questionDiv">
+                <h2>Question: </h2>
+                <h1><strong>{{board1data[question.category][question.index].question}}</strong></h1>
+            </div>
+            <div id="answerDiv">
+                <hr>
+                <h2>Answer: </h2>
+                <h1 id="answer"><strong>{{board1data[question.category][question.index].answer}}</strong></h1>
+            </div>
+        </div>
+    </body>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.8/vue.min.js"></script>
+    <script src="/host/script.js"></script>
+</html>

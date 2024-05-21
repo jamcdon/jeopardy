@@ -84,6 +84,14 @@ body {
 	width: 60%;
 	font-size: 5.4rem;
 }
+.modal-content-image {
+	background:none;
+	padding: 20px;
+	text-shadow: 5px 5px black;
+	color: rgba(221,242,255,255);
+	width: 90%;
+	font-size: 4rem;
+}
 
 @keyframes flyIn {
     from {

@@ -77,11 +77,21 @@ buzzIn = (playerName) => {
 };
 
 openModal = (category, index) => {
-	document.getElementById("modal-question").innerHTML = app._data.boardData[category][index].question;
+    if (app._data.boardData[category][index].picture == null){
+	    document.getElementById("modal-question").innerHTML = app._data.boardData[category][index].question;
+    }
+    else {
+	    modalQuestion = document.getElementById("modal-question");
+        modalQuestion.classList.remove('modal-content')
+        modalQuestion.classList.add('modal-content-image');
+        modalQuestion.innerHTML = `<div class="d-flex"><div>${app._data.boardData[category][index].question}</div><div><img class="img-fluid" src="/img/${app._data.boardData[category][index].picture}"/></div></div>`;
+    }
 	document.getElementById('modal').classList.add('show');
 };
 
 closeModal = () => {
+    document.getElementById("modal-question").classList.remove('modal-content-image');
+    document.getElementById("modal-question").classList.add('modal-content');
 	document.getElementById('modal').classList.remove('show');
 }
 	

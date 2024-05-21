@@ -54,6 +54,10 @@ socket.onmessage = function(event) {
             boardName = xmlDoc.getElementsByTagName('boardName')[0].childNodes[0].nodeValue;
             app.request(boardName);
             break;
+        case "startGame":
+            introImage = document.getElementById('intro-image');
+            introImage.innerHTML = "";
+            introImage.classList = "d-none"
     }
 }
 
@@ -104,6 +108,6 @@ var app = new Vue({
     },
 	data: {
 		players: [],
-        boardData: {}
+        boardData: {},
 	}
 })

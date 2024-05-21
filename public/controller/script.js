@@ -103,10 +103,10 @@ var app = new Vue({
             this.request(board);
         },
         setFinalJeopardy: function(){
-
+            sendJSON('finalJeopardy', '');
         },
-        playIntro: function(){
-
+        startGame: function(){
+            sendJSON('startGame', '');
         }
     },
 	data: {

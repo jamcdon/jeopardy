@@ -12,6 +12,7 @@
     <body>
         <div id="gameboard" class="pt-2">
             <div id="app">
+                <div>
                 <div class="d-flex justify-content-between" id="tile-holder">
                     <div v-for="questions, category in boardData" class="d-flex flex-column jeopardy-column">
                         <div class="topic">
@@ -40,6 +41,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="max-z-index" id="intro-image">
+                <img src="/img/jeop_logo_large.jpg">
+            </div>
             </div>
         </div>
     </body>

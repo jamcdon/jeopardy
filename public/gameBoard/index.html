@@ -18,14 +18,15 @@
                             <h2 class="topic text-center mb-0 py-3 jeopardy-block"><strong>{{category}}</strong></h2>
                         </div>
                         <div class="question jeopardy-block text-center py-3" v-for="question in questions">
-                            <h1><strong>${{question.price}}</strong></h1>
+                            <h1 v-if="question.price != null"><strong>${{question.price}}</strong></h1>
+                            <h1 v-else>&nbsp;</h1>
                         </div>
                     </div>
                 </div>
                 <div class="players d-flex justify-content-around">
-                    <div v-for="money, player in players" :id="`board-${player}`" class = "text-center player">
-                        <h2 class=""><em>{{player}}</em></h2>
-                        <h3 class="mb-0">${{money}}</h3>
+                    <div v-for="player, index in players" :id="`board-${player}`" class = "text-center player">
+                        <h2 class=""><em>{{player.name}}</em></h2>
+                        <h3 class="mb-0">${{player.money}}</h3>
                     </div>
                 </div>
                 <div id="modal" class="modal flex-column">
@@ -33,9 +34,9 @@
                         <div class="players d-flex justify-content-around">
                         </div>
                     <div class="players d-flex justify-content-around w-100 bottom-4px">
-                        <div v-for="money, player in players" :id="`question-${player}`" class = "text-center player">
-                            <h2 class=""><em>{{player}}</em></h2>
-                            <h3 class="mb-0">${{money}}</h3>
+                        <div v-for="player, index in players" :id="`question-${player}`" class = "text-center player">
+                            <h2 class=""><em>{{player.name}}</em></h2>
+                            <h3 class="mb-0">${{player.money}}</h3>
                         </div>
                     </div>
                 </div>

@@ -10,14 +10,19 @@
 
     <body>
         <div id="app">
-            <div id="questionDiv">
-                <h2>Question: </h2>
-                <h1><strong>{{boardData[question.category][question.index].question}}</strong></h1>
+            <div v-if="question.index != null">
+                <div id="questionDiv">
+                    <h2>Question: </h2>
+                    <h1><strong>{{boardData[question.category][question.index].question}}</strong></h1>
+                </div>
+                <div id="answerDiv">
+                    <hr>
+                    <h2>Answer: </h2>
+                    <h1 id="answer"><strong>{{boardData[question.category][question.index].answer}}</strong></h1>
+                </div>
             </div>
-            <div id="answerDiv">
-                <hr>
-                <h2>Answer: </h2>
-                <h1 id="answer"><strong>{{boardData[question.category][question.index].answer}}</strong></h1>
+            <div v-else>
+                <h1>Awaiting controller...</h1>
             </div>
         </div>
     </body>

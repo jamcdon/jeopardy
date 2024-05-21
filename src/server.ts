@@ -6,7 +6,8 @@ import router from './router'
 class Message {
     constructor(
         public client: string,
-        public content: string
+        public content: string,
+        public data: string
     ) { }
 }
 

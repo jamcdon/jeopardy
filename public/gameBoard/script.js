@@ -3,6 +3,7 @@
 // picture handling NOT DONE
 // i think something else design wise but its late
 const client = "board"
+const parser = new DOMParser();
 
 const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
 const wsHost = location.host;
@@ -16,10 +17,42 @@ socket.onopen = function(event) {
 }
 
 socket.onmessage = function(event) {
-    console.log(event.data);
-    switch (event.data.content){
+    const eventData = JSON.parse(event.data);
+    console.log(eventData)
+    let xmlString = eventData.data;
+    console.log(xmlString)
+    if (xmlString != ""){
+        xmlDoc = parser.parseFromString(xmlString, 'text/xml');
+    }
+    switch (eventData.content){
         case "SYN":
             sendJSON("ACK");
+            break;
+        case "questionChange":
+            category = xmlDoc.getElementsByTagName('category')[0].childNodes[0].nodeValue;
+            index = xmlDoc.getElementsByTagName('index')[0].childNodes[0].nodeValue;
+            openModal(category, index)
+            app._data.boardData[category][index].price = null
+            break;
+        case "returnToBoard":
+            closeModal()
+            break;
+        case "submitPlayers":
+            player1Name = xmlDoc.getElementsByTagName('player1Name')[0].childNodes[0].nodeValue;
+            player2Name = xmlDoc.getElementsByTagName('player2Name')[0].childNodes[0].nodeValue;
+            player3Name = xmlDoc.getElementsByTagName('player3Name')[0].childNodes[0].nodeValue;
+            app._data.players.push({"name": player1Name, "money": 0});
+            app._data.players.push({"name": player2Name, "money": 0});
+            app._data.players.push({"name": player3Name, "money": 0});
+            break;
+        case "changeMoney":
+            playerIndex = xmlDoc.getElementsByTagName('playerIndex')[0].childNodes[0].nodeValue;
+            newMoney = xmlDoc.getElementsByTagName('newMoney')[0].childNodes[0].nodeValue;
+            app._data.players[playerIndex].money = newMoney;
+            break;
+        case "changeBoard":
+            boardName = xmlDoc.getElementsByTagName('boardName')[0].childNodes[0].nodeValue;
+            app.request(boardName);
             break;
     }
 }
@@ -27,7 +60,8 @@ socket.onmessage = function(event) {
 let sendJSON = (content) => {
     socket.send(`{
         "client": "${client}",
-        "content": "${content}"
+        "content": "${content}",
+        "data": ""
     }`)
 }
 
@@ -39,7 +73,7 @@ buzzIn = (playerName) => {
 };
 
 openModal = (category, index) => {
-	document.getElementById("modal-question").innerHTML = app._data.board1data[category][index].question;
+	document.getElementById("modal-question").innerHTML = app._data.boardData[category][index].question;
 	document.getElementById('modal').classList.add('show');
 };
 
@@ -69,11 +103,7 @@ var app = new Vue({
         }
     },
 	data: {
-		players: {
-			brady: 200,
-			Anthony: 800,
-			Scott: 1000
-		},
+		players: [],
         boardData: {}
 	}
 })

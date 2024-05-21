@@ -1,5 +1,7 @@
 const client = "host"
 
+const parser = new DOMParser();
+
 const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
 const wsHost = location.host;
 const wsUrl = `${wsProtocol}//${wsHost}`;
@@ -12,10 +14,28 @@ socket.onopen = function(event) {
 }
 
 socket.onmessage = function(event) {
-    console.log(event.data);
-    switch (event.data.content){
+    const eventData = JSON.parse(event.data);
+    console.log(eventData)
+    let xmlString = eventData.data;
+    console.log(xmlString)
+    if (xmlString != ""){
+        xmlDoc = parser.parseFromString(xmlString, 'text/xml');
+    }
+    switch (eventData.content){
         case "SYN":
             sendJSON("ACK");
+            break;
+        case "questionChange":
+            app._data.question.category = xmlDoc.getElementsByTagName('category')[0].childNodes[0].nodeValue;
+            app._data.question.index = xmlDoc.getElementsByTagName('index')[0].childNodes[0].nodeValue;
+            break;
+        case "returnToBoard":
+            app._data.question.category = null;
+            app._data.question.index = null;
+            break;
+        case "changeBoard":
+            boardName = xmlDoc.getElementsByTagName('boardName')[0].childNodes[0].nodeValue;
+            app.request(boardName);
             break;
     }
 }
@@ -23,7 +43,8 @@ socket.onmessage = function(event) {
 let sendJSON = (content) => {
     socket.send(`{
         "client": "${client}",
-        "content": "${content}"
+        "content": "${content}",
+        "data": ""
     }`)
 }
 
@@ -50,8 +71,8 @@ var app = new Vue({
     },
 	data: {
 		question: {
-			category: "Indy 500",
-			index: 0
+			category: null,
+			index: null
 		},
         boardData: {}
 

@@ -1,12 +1,14 @@
 
 type finalJeopardyQuestion = {
+    category: string,
     question: string,
     answer: string
 }
 
 export const finalJeopardyData: finalJeopardyQuestion = {
-    question: "test",
-    answer: "also a test"
+    category: "Indiana History",
+    question: "This Indianapolis suburb was originally named after the biblical town of Bethlehem, but had to be changed once incorporated",
+    answer: "Carmel, Indiana"
 }
 
 type question = {
@@ -85,7 +87,7 @@ export const board1data: board = {
         {
             question: "This was Nintendo's first portable gaming device, named after its two features",
             answer: "Game & Watch",
-            picture: "gameandwatch",
+            picture: "gameandwatch.png",
             doubleJeopardy: false,
             price: 800
         },
@@ -268,7 +270,7 @@ export const board2data: board = {
             question: "Originally taking place in Woodsboro, CA - the most recent addition to the franchise takes place in New York City",
             answer: "Scream",
             picture: null,
-            doubleJeopardy: false,
+            doubleJeopardy: true,
             price: 1200
         },
         {

@@ -37,6 +37,28 @@ socket.onmessage = function(event) {
             boardName = xmlDoc.getElementsByTagName('boardName')[0].childNodes[0].nodeValue;
             app.request(boardName);
             break;
+        case "finalJeopardy":
+            answer = xmlDoc.getElementsByTagName('answer')[0].childNodes[0].nodeValue;
+            question = xmlDoc.getElementsByTagName('question')[0].childNodes[0].nodeValue;
+
+            if (app._data.question.index != null){
+                document.getElementById('question').innerHTML = `<strong>${question}</strong>`;
+                document.getElementById('answer').innerHTML = `<strong>${answer}</strong>`;
+            } else {
+                document.getElementById('await').innerHTML = `
+                <div id="questionDiv">
+                    <h2>Question: </h2>
+                    <h1 id="question"><strong>${question}</strong></h1>
+                </div>
+                <div id="answerDiv">
+                    <hr>
+                    <h2>Answer: </h2>
+                    <h1 id="answer"><strong>${answer}</strong></h1>
+                </div>
+                `
+
+            }
+            break;
     }
 }
 

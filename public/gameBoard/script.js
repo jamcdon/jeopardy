@@ -1,7 +1,5 @@
 // sound needs to be added
-// intro would be a nice to have add
-// picture handling NOT DONE
-// i think something else design wise but its late
+// add final jeopardy
 const client = "board"
 const parser = new DOMParser();
 
@@ -58,6 +56,18 @@ socket.onmessage = function(event) {
             introImage = document.getElementById('intro-image');
             introImage.innerHTML = "";
             introImage.classList = "d-none"
+            break;
+        case "finalJeopardy":
+            category = xmlDoc.getElementsByTagName('category')[0].childNodes[0].nodeValue;
+            finalJeopardyModal(category)
+            break;
+        case "finalJeopardypt2":
+            question = xmlDoc.getElementsByTagName('question')[0].childNodes[0].nodeValue;
+            finalJeopardyModal(question)
+            break;
+        case "finalJeopardyMusic":
+            document.getElementById('final-jeopardy-music').play();
+            break;
     }
 }
 
@@ -77,14 +87,22 @@ buzzIn = (playerName) => {
 };
 
 openModal = (category, index) => {
-    if (app._data.boardData[category][index].picture == null){
-	    document.getElementById("modal-question").innerHTML = app._data.boardData[category][index].question;
+    if (app._data.boardData[category][index].doubleJeopardy == true){
+        document.getElementById("modal-question").innerHTML = `<img class="img-fluid" src="/img/Daily_Double.webp"/>`;
+        document.getElementById('daily-double-sound').play();
+
+        app._data.boardData[category][index].doubleJeopardy = false;
     }
     else {
-	    modalQuestion = document.getElementById("modal-question");
-        modalQuestion.classList.remove('modal-content')
-        modalQuestion.classList.add('modal-content-image');
-        modalQuestion.innerHTML = `<div class="d-flex"><div>${app._data.boardData[category][index].question}</div><div><img class="img-fluid" src="/img/${app._data.boardData[category][index].picture}"/></div></div>`;
+        if (app._data.boardData[category][index].picture == null){
+            document.getElementById("modal-question").innerHTML = app._data.boardData[category][index].question;
+        }
+        else {
+            modalQuestion = document.getElementById("modal-question");
+            modalQuestion.classList.remove('modal-content')
+            modalQuestion.classList.add('modal-content-image');
+            modalQuestion.innerHTML = `<div class="d-flex"><div>${app._data.boardData[category][index].question}</div><div><img class="img-fluid" src="/img/${app._data.boardData[category][index].picture}"/></div></div>`;
+        }
     }
 	document.getElementById('modal').classList.add('show');
 };
@@ -93,6 +111,11 @@ closeModal = () => {
     document.getElementById("modal-question").classList.remove('modal-content-image');
     document.getElementById("modal-question").classList.add('modal-content');
 	document.getElementById('modal').classList.remove('show');
+}
+
+finalJeopardyModal = (content) => {
+    document.getElementById("modal-question").innerHTML = content;
+	document.getElementById('modal').classList.add('show');
 }
 	
 var app = new Vue({

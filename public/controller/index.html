@@ -36,7 +36,7 @@
                 <div>
                     <h3 v-if="question.category != null">current question value: <strong>${{boardData[question.category][question.index].price}}</strong></h3>
                     <h3 v-else>current question value: <strong>Null</strong></h3>
-                    <button class="btn btn-dark mb-1" v-on:click="returnToBoard()">return to gameboard</button>
+                    <button class="btn btn-dark mb-1" v-on:click="returnToBoard()" id="return-to-gameboard">return to gameboard</button>
                 </div>
             </div>
             <div>
@@ -103,8 +103,16 @@
                 </div>
                 <div class="d-flex w-100 mb-1">
                     <button class="btn btn-warning w-50" v-on:click="changeGameboard('board2')">Gameboard 2</button>
-                    <button class="btn btn-primary w-50">Final jeopardy</button>
+                    <button class="btn btn-primary w-50" v-on:click="dailyDouble()">resubmit double</button>
                 </div>
+                <div class="d-flex w-100 mb-1">
+                    <button class="btn btn-primary w-50" v-on:click="setFinalJeopardy()">Final jeopardy</button>
+                    <button class="btn btn-warning w-50" v-on:click="setFinalJeopardyQuestion()">Final Jeopardy pt 2</button>
+                </div>
+                <div class="d-flex w-100 mb-1">
+                    <button class="btn btn-warning w-50" v-on:click="finalJeopardyMusic()">Final Jeopardy Music</button>
+                </div>
+
                 <div class="d-flex flex-column">
                     <div class="ruby-block">
                         <p>Player 1:</p>

@@ -39,6 +39,7 @@ var app = new Vue({
 	el: "#app",
     mounted:function(){
         this.request('board1')
+        this.getFinalJeopardy()
     },
     methods:{
         request: function(route) {
@@ -55,10 +56,28 @@ var app = new Vue({
             }
             xhr.send();
         },
+        getFinalJeopardy: function(){
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', `/final`);
+
+            xhr.onload = function(){
+                if (xhr.status === 200){
+                    finalJeopardy = JSON.parse(xhr.responseText);
+                    app._data.finalJeopardy = finalJeopardy;
+                }
+                else{
+                    console.log(xhr.status);
+                }
+            }
+            xhr.send();
+        },
         setNewQuestion: function(question, category){
             index = app._data.boardData[category].indexOf(question)
             const xmlString = `<data><category>${category}</category><index>${index}</index></data>`
             sendJSON("questionChange", xmlString);
+            if (app._data.boardData[category][index].doubleJeopardy == true){
+                document.getElementById('return-to-gameboard').classList.add("d-none");
+            }
             app._data.question.category = category;
             app._data.question.index = index;
         },
@@ -103,10 +122,25 @@ var app = new Vue({
             this.request(board);
         },
         setFinalJeopardy: function(){
-            sendJSON('finalJeopardy', '');
+            finalJeopardy = app._data.finalJeopardy;
+            sendJSON('finalJeopardy', `<data><category>${finalJeopardy.category}</category><answer>${finalJeopardy.answer}</answer><question>${finalJeopardy.question}</question></data>`);
+        },
+        setFinalJeopardyQuestion: function(){
+            finalJeopardy = app._data.finalJeopardy;
+            sendJSON('finalJeopardypt2', `<data><category>${finalJeopardy.category}</category><answer>${finalJeopardy.answer}</answer><question>${finalJeopardy.question}</question></data>`);
         },
         startGame: function(){
             sendJSON('startGame', '');
+        },
+        dailyDouble: function() {
+            index = app._data.question.index
+            category = app._data.question.category
+            const xmlString = `<data><category>${category}</category><index>${index}</index></data>`
+            sendJSON("questionChange", xmlString);
+            document.getElementById('return-to-gameboard').classList.remove("d-none");
+        },
+        finalJeopardyMusic: function() {
+            sendJSON("finalJeopardyMusic", "");
         }
     },
 	data: {
@@ -115,6 +149,7 @@ var app = new Vue({
             index: null
         },
         players: [],
-        boardData: {}
+        boardData: {},
+        finalJeopardy: {}
 	}
 })

@@ -1,0 +1,9 @@
+version: '3.0'
+
+services:
+    jeopardy:
+        build: .
+        container_name: jeopardy
+        restart: unless-stopped
+        ports: 
+          - "3080:3000"

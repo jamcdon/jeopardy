@@ -4,7 +4,7 @@ import { board1data, board2data, finalJeopardyData } from "./data"
 const router = Router()
 
 // gameshow front page
-router.get("/gameboard", async(req: Request, res: Response) => {
+router.get("/", async(req: Request, res: Response) => {
     return res.status(200).sendFile("index.html", {root: "./public/gameboard/"})
 })
 router.get('/gameboard/:file', async (req: Request, res: Response) => {

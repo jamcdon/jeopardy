@@ -11,6 +11,10 @@ class Message {
     ) { }
 }
 
+interface ExtWebSocket extends WebSocket {
+	isAlive: boolean;
+};
+
 const app: Application = express();
 
 const HOST = '0.0.0.0';
@@ -27,6 +31,8 @@ const startServer = (expressApplication: Application): void => {
     const server = http.createServer(app)
     const wss = new WebSocket.Server({server})
     wss.on('connection', (ws) =>{
+        const extWs = ws as ExtWebSocket;
+        extWs.isAlive = true;
         ws.on('message', (msg: string) => {
             const message = JSON.parse(msg) as Message
 
@@ -37,8 +43,21 @@ const startServer = (expressApplication: Application): void => {
                     )
                 }
             })
-        })
-    })
+        });
+        ws.on('pong', () => {
+            extWs.isAlive = true;
+        });
+    });
+
+    setInterval(() => {
+        wss.clients.forEach((ws) => {
+            const extWs = ws as ExtWebSocket;
+
+            if (!extWs.isAlive) return ws.terminate()
+            extWs.isAlive = false;
+            ws.ping(null, undefined)
+        });
+    }, 10000)
 
     try {
         server.listen(PORT, HOST, () => {

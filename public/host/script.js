@@ -11,13 +11,13 @@ let socket = new WebSocket(wsUrl);
 socket.onopen = function(event) {
     console.log("[open] connection established");
     sendJSON("SYN");
+    startHeartbeat();
 }
 
 socket.onmessage = function(event) {
     const eventData = JSON.parse(event.data);
     console.log(eventData)
     let xmlString = eventData.data;
-    console.log(xmlString)
     if (xmlString != ""){
         xmlDoc = parser.parseFromString(xmlString, 'text/xml');
     }
@@ -60,6 +60,28 @@ socket.onmessage = function(event) {
             }
             break;
     }
+}
+
+socket.onclose = function(event) {
+    console.log("[close] connection closed");
+    stopHeartbeat();
+}
+
+socket.onerror = function(error) {
+    console.log(`[error] ${error.message}`)
+}
+
+let hearbeatInterval;
+const startHeartbeat = () => {
+    hearbeatInterval = setInterval(() => {
+        if (socket.readyState === WebSocket.OPEN){
+            sendJSON("PING", "")
+        }
+    }, 10000)
+}
+
+const stopHeartbeat = () => {
+    clearInterval(hearbeatInterval)
 }
 
 let sendJSON = (content) => {

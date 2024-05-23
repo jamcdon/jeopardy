@@ -15,6 +15,7 @@ let socket = new WebSocket(wsUrl);
 socket.onopen = function(event) {
     console.log("[open] connection established");
     sendJSON("SYN", "");
+    startHeartbeat();
 }
 
 socket.onmessage = function(event) {
@@ -25,6 +26,28 @@ socket.onmessage = function(event) {
             sendJSON("ACK", "");
             break;
     }
+}
+
+socket.onclose = function(event) {
+    console.log("[close] connection closed");
+    stopHeartbeat();
+}
+
+socket.onerror = function(error) {
+    console.log(`[error] ${error.message}`)
+}
+
+let hearbeatInterval;
+const startHeartbeat = () => {
+    hearbeatInterval = setInterval(() => {
+        if (socket.readyState === WebSocket.OPEN){
+            sendJSON("PING", "")
+        }
+    }, 10000)
+}
+
+const stopHeartbeat = () => {
+    clearInterval(hearbeatInterval)
 }
 
 let sendJSON = (content, data) => {

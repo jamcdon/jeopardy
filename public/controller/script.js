@@ -164,6 +164,12 @@ var app = new Vue({
         },
         finalJeopardyMusic: function() {
             sendJSON("finalJeopardyMusic", "");
+        },
+        buzzIn: function(player, playerIndex){
+            question = app._data.question;
+            document.getElementById(`money-input-box-${playerIndex}`).value = app._data.boardData[question.category][question.index].price;
+            sendJSON("buzzIn", `<data><player>${player}</player></data>`)
+
         }
     },
 	data: {

@@ -68,6 +68,10 @@ socket.onmessage = function(event) {
         case "finalJeopardyMusic":
             document.getElementById('final-jeopardy-music').play();
             break;
+        case "buzzIn":
+            player = xmlDoc.getElementsByTagName('player')[0].childNodes[0].nodeValue;
+            buzzIn(player)
+            break;
     }
 }
 

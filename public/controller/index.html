@@ -27,7 +27,7 @@
                     <div v-for="player, index in players" :id="`board-${player}`" class = "text-center player">
                         <h2 class=""><em>{{player.name}}</em></h2>
                         <h3 class="mb-0">${{player.money}}</h3>
-                        <p><button class="btn btn-light">buzzed</button></p>
+                        <p><button class="btn btn-light" v-on:click="buzzIn(player.name, index)">buzzed</button></p>
                         <input type="number" size="5" class="w-50" :id="`money-input-box-${index}`">
                         <button class="btn btn-success" v-on:click="addMoney(index)">+</button>
                         <button class="btn btn-danger" v-on:click="subtractMoney(index)">-</button>

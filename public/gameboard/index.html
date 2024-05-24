@@ -35,7 +35,7 @@
                         <div class="players d-flex justify-content-around">
                         </div>
                     <div class="players d-flex justify-content-around w-100 bottom-4px">
-                        <div v-for="player, index in players" :id="`question-${player}`" class = "text-center player">
+                        <div v-for="player, index in players" :id="`question-${player.name}`" class = "text-center player">
                             <h2 class=""><em>{{player.name}}</em></h2>
                             <h3 class="mb-0">${{player.money}}</h3>
                         </div>
